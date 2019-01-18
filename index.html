@@ -41,7 +41,8 @@
             <section class="block">
               <button v-on:click="page.width += 5; viewer.width -= 5;">Expand</button>
               <button v-on:click="page.width -= 5; viewer.width += 5;">Shrink</button>
-              <button v-on:click="goToPreviousPost">Previous Post</button>
+              <button v-if="viewer.view === 1" v-on:click="goToPreviousPost">Previous Post</button>
+              <button v-else v-on:click="goToPreviousCode">Previous Code</button>
               <button v-on:click="changePostViewerFontSize( -0.1 )">- Font Size</button>
               <button v-on:click="changePostViewerFontSize( 0.1 )">+ Font Size</button>
             </section>
@@ -53,15 +54,7 @@
             </section>
 
             <section class="block">
-              <sidebar-code-list :list="snippets"></sidebar-code-list>
-
-              <nav class="viewer-nav">
-                <ul>
-                  <link-item text="Posts" :class="checkCurrentView(0) || checkCurrentView(2) ? 'active' : 'inactive'" @item-click.native="viewerLinkHandler(0)"></link-item>
-                  <link-item text="Code" :class="checkCurrentView(1) || checkCurrentView(3) ? 'active' : 'inactive'" @item-click.native="viewerLinkHandler(1)"></link-item>
-                  <link-item v-if="false" text="Projects" :class="checkCurrentView(1) || checkCurrentView(3) ? 'active' : 'inactive'"></link-item>
-                </ul>
-              </nav>
+              <sidebar-code-list :list="snippets" @anchor-click="codeLinkHandler" @anchor-inner-click="codeLinkHandler"></sidebar-code-list>
             </section>
           </div>
         </div>
@@ -84,13 +77,13 @@
       </main>
 
       <!-- Display a Viewer container for links -->
-      <viewer v-if="checkCurrentView(0) || checkCurrentView(1)" :style="viewerWidth"></viewer>
+      <viewer v-if="viewer.post.current === '' && viewer.code.current === ''" :style="viewerWidth"></viewer>
 
       <!-- Display a Viewer container for post html -->
-      <viewer v-if="checkCurrentView(2)" class-name="post-viewer" v-html="viewer.post.content" :style="viewerWidth + ' ' + viewerFontSize"></viewer>
+      <viewer v-if="checkCurrentView(0)" class-name="post-viewer" v-html="viewer.post.content" :style="viewerWidth + ' ' + viewerFontSize"></viewer>
 
       <!-- Display a Viewer container for code html -->
-      <code-viewer v-else-if="checkCurrentView(3)" class-name="code-viewer" :src="viewer.code.src" :style="viewerWidth"></code-viewer>
+      <code-viewer v-else-if="checkCurrentView(1)" class-name="code-viewer" :src="viewer.code.src" :style="viewerWidth"></code-viewer>
     </div>
 
     <!-- VueJS Components -->

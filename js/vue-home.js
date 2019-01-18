@@ -14,10 +14,15 @@ let HomePage = new Vue({
     },
 
     viewer: {
-      views: ['Post Links', 'Code Links', 'Post', 'Code'],
+      views: ['Post', 'Code'],
       view: 0,
       code: {
         src: ''
+      },
+
+      code: {
+        current: '',
+        history: []
       },
 
       post: {
@@ -39,6 +44,9 @@ let HomePage = new Vue({
   methods: {
     /* openCode */addCodeUriToViewer: function( uri ){
       this.reactifyCodeUri(uri);
+    },
+    addCodeUriToHistory: function( uri ){
+      this.viewer.code.history.push(uri);
     },
     /* addPostToHistory */addPostUriToHistory: function( uri ){
       this.viewer.post.history.push(uri);
@@ -63,7 +71,7 @@ let HomePage = new Vue({
     codeLinkHandler: function( uri ){
       this.addCodeUriToViewer(uri);
       this.reactifyCodeUri(uri);
-      this.switchView(3);
+      this.switchView(1);
     },
     /* getView */getViewName: function( i ){
       if( typeof i === 'number' && i < this.viewer.views.length ){
@@ -74,6 +82,20 @@ let HomePage = new Vue({
     },
     /* matchView */checkCurrentView: function( i ){
       return this.viewer.view === i;
+    },
+    goToPreviousCode: function(){
+      const thereAreItemsInHistory = this.viewer.code.history.length > 0;
+      const currentCodeIsMostRecent = this.viewer.code.history.lastIndexOf(this.viewer.code.current) > -1;
+
+      console.log('Current code: ', this.viewer.code.current, currentCodeIsMostRecent);
+
+      if( thereAreItemsInHistory ){
+        if( currentCodeIsMostRecent ){
+          this.viewer.code.history.pop()
+        }
+
+        this.addCodeUriToViewer(this.viewer.code.history.pop());
+      }
     },
     /* openPreviousPost */goToPreviousPost: function(){
       const thereAreItemsInHistory = this.viewer.post.history.length > 0;
@@ -92,7 +114,7 @@ let HomePage = new Vue({
     /* postHandler */postLinkHandler: function( uri ){
       this.addPostHtmlToViewer(uri);
       this.addPostUriToHistory(uri);
-      this.switchView(2);
+      this.switchView(0);
       this.viewer.post.open = true;
       console.log('Clicked on: ', uri, 'Post history: ', this.viewer.post.history);
     },
@@ -103,10 +125,12 @@ let HomePage = new Vue({
       this.viewer.post.content = result;
     },
     switchView: function( i ){
-      const getCurrentView = () => this.viewer.view, getCurrentViewIndex = ( s ) => this.viewer.views.indexOf(s);
-      console.log('Previous View: ' + getCurrentView() + '(' + getCurrentViewIndex(getCurrentView()) + ')');
+      const getCurrentView = () => this.viewer.view,
+      getCurrentViewIndex = ( s ) => this.viewer.views.indexOf(s);
+
+        console.log('Previous View: ' + getCurrentView() + '(' + getCurrentViewIndex(getCurrentView()) + ')');
       this.viewer.view = this.viewer.views[i] ? i : getCurrentView();
-      console.log('New View: ' + getCurrentView() + '(' + getCurrentViewIndex(getCurrentView()) + ')');
+        console.log('New View: ' + getCurrentView() + '(' + getCurrentViewIndex(getCurrentView()) + ')');
     },
     viewerLinkHandler: function( viewIndex ){
       this.switchView(viewIndex);
@@ -114,7 +138,7 @@ let HomePage = new Vue({
   },
   components: {
     'SidebarPostList': typeof SidebarPostList !== 'undefined' ? SidebarPostList : (logError('SidebarPostList is undefined.'), {}),
-    'SidebarCodeList': typeof SidebarCodeList !== 'undefined' ? SidebarCodeList : (logError('SidebarCodeList is undefined.'), {}),
+    'SidebarCodeList': typeof SidebarPostList !== 'undefined' ? SidebarPostList : (logError('SidebarCodeList is undefined.'), {}),
     'ScrolldownNotifier': typeof ScrolldownNotifier !== 'undefined' ? ScrolldownNotifier : (logError('ScrolldownNotifier is undefined.'), {}),
     'Viewer': typeof Viewer !== 'undefined' ? Viewer : (logError('Viewer is undefined.'), {}),
     'CodeViewer': typeof CodeView !== 'undefined' ? CodeView : (logError('CodeViewer is undefined.'), {}),
