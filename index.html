@@ -5,6 +5,7 @@
     <title>Michael Goldspinner | Web Developer</title>
 
     <!-- Vendor Stylesheets -->
+    <link rel="stylesheet" href="css/vendor/lightfair.css" />
 
     <!-- User Stylesheets -->
     <link rel="stylesheet" type="text/css" href="css/normalize.css"/>
@@ -18,66 +19,87 @@
     <script src="js/vendor/vue-2.5.17.js"></script>
     <!--<script src="js/vendor/vue.min.js"></script>-->
     <script src="js/vendor/jquery-2.1.4.min.js"></script>
-    <script src="js/vendor/showdown.min.js"></script>
+    <script src="js/vendor/highlight.pack.js"></script>
+
 
     <!-- User Scripts -->
+    <script src="js/init-vue.js"></script>
     <script src="code/index.js"></script>
     <script src="posts/index.js"></script>
-    <script src="js/init-vue.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/functions.js"></script>
   </head>
 
   <body class="theme_font theme_bg theme_txt--bleed">
-    <main id="v" class="theme_bg--secondary page">
-      <div class="content-window">
-        <header class="block clearfix">
-          <h1 class="logo">Michael Goldspinner</h1>
-        </header>
+    <div id="vue-home">
+      <main class="theme_bg--secondary theme_bd page" :style="pageWidth">
+        <div class="content-window">
+          <header class="block clearfix">
+            <h1 class="logo">Michael Goldspinner</h1>
+          </header>
 
-        <div class="content">
-          <section class="block">
-            <p>I'm a husband, christian, and front-end web developer.</p>
-          </section>
+          <div class="content">
+            <section class="block">
+              <button v-on:click="p.w += 5; v.w -= 5;">Expand</button>
+              <button v-on:click="p.w -= 5; v.w += 5;">Shrink</button>
+              <button v-on:click="goToPreviousPost">Previous Post</button>
+              <button v-on:click="changePostViewerFontSize( -0.1 )">- Font Size</button>
+              <button v-on:click="changePostViewerFontSize( 0.1 )">+ Font Size</button>
+            </section>
 
-          <section id="PostList" class="block theme_bg">
-            <h1>Posts</h1>
+            <section class="block"><p>Some text about me and what I do as filler content.</p></section>
 
-            <nav class="list-nav"><ul><post-link v-for="post of posts" :key="post.id" :text="post.text" :href="post.href"></post-link></ul></nav>
-          </section>
-
-          <section id="CodeList" class="block">
-            <h1>Code</h1>
-
-            <nav class="list-nav"><ul><code-link v-for="snippet of snippets" :key="snippet.id" :file="snippet.file" :text="snippet.text" :href="snippet.href"></code-link></ul></nav>
-          </section>
-        </div>
-      </div>
-
-      <footer id="PageFooter" class="footer keep-bottom theme_bg">
-        <div class="block">
-          <nav class="links"><ul class="x">
-            <!--<li><a href="#topOfPage">Back To Top</a></li>
-            <li><a href="#">Development Notes</a></li>-->
-            <li><a title="Link to my Linkedin profile." target="_blank" href="https://www.linkedin.com/in/michael-goldspinner/">Linkedin</a></li>
-            <li><a title="Link to my Github profile." target="_blank" href="https://github.com/Emgo-Dev">Github</a></li>
-            <li><a title="Link to my Codepen profile." target="_blank" href="https://www.codepen.io/Emgo/">Codepen</a></li>
-          </ul></nav>
+            <section id="PostList" class="block">
+              <nav class="viewer-nav">
+                <ul>
+                  <link-item text="Posts" :class="checkCurrentView(0) || checkCurrentView(2) ? 'active' : 'inactive'" @click.native="viewerLinkHandler(0)"></link-item>
+                  <link-item text="Code" :class="checkCurrentView(1) || checkCurrentView(3) ? 'active' : 'inactive'" @click.native="viewerLinkHandler(1)"></link-item>
+                </ul>
+              </nav>
+            </section>
+          </div>
         </div>
 
-        <div class="block"><copyright business="Michael Goldspinner"></copyright></div>
-      </footer>
-    </main>
+        <footer id="PageFooter" class="footer keep-bottom theme_bg" :style="pageWidth">
+          <div class="block">
+            <nav class="links">
+              <ul class="x">
+                <li><span><a title="Link to my Linkedin profile." target="_blank" href="https://www.linkedin.com/"><span>Linkedin</span></a></span></li>
+                <li><span><a title="Link to my Github profile." target="_blank" href="https://github.com/Emgo-Dev"><span>Github</span></a></span></li>
+                <li><span><a title="Link to my Codepen profile." target="_blank" href="https://www.codepen.io/Emgo/"><span>Codepen</span></a></span></li>
+              </ul>
+            </nav>
+          </div>
 
-    <div id="ajaxContent" class="viewer">
-      <h1>Post/Demo Viewer</h1>
+          <div class="block"><copyright>Michael Goldspinner</copyright></div>
+        </footer>
+      </main>
 
-      <p>Click a Link to the left.</p>
+      <!-- Display a Viewer container for links -->
+      <viewer v-if="checkCurrentView(0) || checkCurrentView(1)" :style="viewerWidth">
+        <!-- If Viewer Link Hander #1 is clicked, display first collection of links -->
+        <link-view v-if="checkCurrentView(0)" :list="posts">
+          <link-item v-for="item of posts" @anchor-click="postLinkHandler" @anchor-inner-click="postLinkHandler" :key="item.id" :data-id="item.id" :file="item.file" :text="item.text" :href="item.href"></link-item>
+        </link-view>
+
+        <!-- If Viewer Link Hander #2 is clicked, display second collection of links -->
+        <link-view v-else-if="checkCurrentView(1)" :list="snippets">
+          <link-item v-for="item of snippets"  @anchor-click="codeLinkHandler" @anchor-inner-click="codeLinkHandler" :key="item.id" :file="item.file" :text="item.text" :href="item.href"></link-item>
+        </link-view>
+      </viewer>
+
+      <!-- Display a Viewer container for post html -->
+      <viewer v-if="checkCurrentView(2)" class-name="post-viewer" v-html="viewer.post.content" :style="viewerWidth + ' ' + viewerFontSize"></viewer>
+
+      <!-- Display a Viewer container for code html -->
+      <code-viewer v-else-if="checkCurrentView(3)" class-name="code-viewer" :src="viewer.code.src" :style="viewerWidth"></code-viewer>
     </div>
 
     <!-- VueJS Components -->
-    <script src="src/components/post-link.js"></script>
-    <script src="src/components/post-button.js"></script>
-    <script src="src/components/code-link.js"></script>
-    <script src="src/components/all-link.js"></script>
+    <script src="src/components/link-item.js"></script>
+    <script src="src/components/link-view.js"></script>
+    <script src="src/components/code-view.js"></script>
+    <script src="src/components/viewer.js"></script>
     <script src="src/components/copyright.js"></script>
   </body>
 </html>

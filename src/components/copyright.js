@@ -1,4 +1,6 @@
 const Copyright = {
-  props: ['business'],
-  template: '<p class="x">&copy; {{ new Date().getFullYear() }} {{ business }}</p>'
+  props: [],
+  template: `
+    <p class="x">&copy; {{ new Date().getFullYear() }} <slot></slot></p>
+  `
 };
