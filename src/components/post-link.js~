@@ -1,0 +1,26 @@
+const PostLink = {
+  props: {
+    text: String,
+    href: String
+  },
+  methods: {
+    bubble: function( event ){ event.preventDefault(); console.log(event.target); },
+    loadPost: function( event ){
+      event.preventDefault();
+
+      $.ajax({ type: 'GET', url: (event.target.attributes.href ?
+        event.target.attributes.href :
+        event.target.parentElement.attributes.href
+      ).value, success: function( result ){
+        let html = new DOMParser().parseFromString(result, 'text/html').children;
+        let ele = document.querySelector('#ajaxContent');
+
+        ele.classList.remove('code-viewer');
+        ele.classList.add('post-viewer');
+        ele.innerHTML = '';
+        ele.innerHTML = result.children[0].children[1].innerHTML;
+      }});
+    }
+  },
+  template: '<li class="nav-item"><span class="nav-item__button"><a v-if="href" v-on:click.capture="loadPost" v-bind:href="href" v-bind:title="\'Link to \' + text" target="_self" class="nav-item__link"><span v-on:click="loadPost">{{ text }}</span></a><span v-else>{{ text }}</span></span></li>'
+}

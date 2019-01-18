@@ -1,0 +1,15 @@
+/* Cancel Styles */
+
+p.x {
+  margin: 0em;
+}
+
+ul.x {
+  padding: 0em;
+  margin: 0em;
+}
+
+ul.x li {
+  display: inline;
+  list-style-type: none;
+}

@@ -1,0 +1,15 @@
+let CodeLinks = [
+  { file: "code/ui/mobile-transaction-ui.zip", href: "code/ui/mobile-transaction-ui/index.html", text: "Mobile Transaction UI", tags: ["ui"] },
+  { file: "code/ui/todo-list-1.zip", href: "code/ui/todo-list-1/index.html", text: "ToDo List #1", tags: ["ui"] },
+  { file: "code/ui/upcoming-events-1.zip", href: "code/ui/upcoming-events-1/index.html", text: "Upcoming Events #1", tags: ["ui"] },
+  { file: "code/ui/upcoming-events-2.zip", href: "code/ui/upcoming-events-2/index.html", text: "Upcoming Events #2", tags: ["ui"] },
+  { file: "code/ui/single-page-site-demo.zip", href: "code/ui/single-page-site-demo/index.html", text: "Single Page Site", tags: ["ui"] },
+  { file: "code/practice/bible-relational-db-schema.zip", href: "code/practice/bible-relational-db-schema/index.html", text: "Bible Relational DB Schema", tags: ["practice"] },
+  { file: "code/practice/character-typing.zip", href: "code/practice/character-typing/index.html", text: "Character Typing", tags: ["practice"] },
+  { file: "code/practice/css-grid.zip", href: "code/practice/css-grid/index.html", text: "CSS Grid", tags: ["practice"] },
+  { file: "code/practice/css-y-axis-centering.zip", href: "code/practice/css-y-axis-centering/index.html", text: "CSS Axis Centering", tags: ["practice"] },
+  { file: "code/practice/event-override.zip", href: "code/practice/event-override/index.html", text: "Event Override", tags: ["practice"] },
+  { file: "code/practice/faucet-sink.zip", href: "code/practice/faucet-sink/index.html", text: "Faucet Sink", tags: ["practice"] },
+  { file: "code/practice/hidden-scrollbar.zip", href: "code/practice/hidden-scrollbar/index.html", text: "Hidden Scrollbar", tags: ["practice"] },
+  { file: "code/practice/iframe-popup.zip", href: "code/practice/iframe-popup/index.html", text: "iFrame Popup", tags: ["practice"] },
+]
