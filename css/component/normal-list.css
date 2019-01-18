@@ -1,0 +1,89 @@
+/*
+
+  Markup
+
+  <li class="nav-item">
+    <span class="nav-item__button">
+      <a class="nav-item__link">
+        <span>Link Text</span>
+      </a>
+    </span>
+  </li>
+
+  Breakdown
+  
+  li.nav-item
+    Parent container, determines overall appearance (grid, flex, etc.).
+  li.nav-item span.nav-item__button
+    Immediate container, may determine breakpoints between container & content, or alignment of content within container.
+  li.nav-item a.nav-item__link
+
+*/
+
+/* Structural */
+
+/* .nav-item, */
+/* DO NOT add directly. Scope such declarations within modifiers to suit the design. */
+.some-modifier .nav-item,
+.sidebar-nav .nav-item {
+  list-style: none;
+}
+
+.sidebar-nav { padding: 0em; margin: 0em; }
+
+/* Most useful on inline children elements. */
+.nav-item__button,
+.nav-item__link,
+.nav-item__link--download,
+.nav-item__link--download > span {
+  /* Flex offers the greatest flexibility of 'normal' displays simulating left, right, vertical alignment and more. */
+  display: flex;
+  flex-flow: row wrap; /* Normal flow-content behavior. */
+
+  /* Restrict these defaults, most annoying when they occur. */
+  padding: 0em;
+  margin: 0em;
+}
+
+.nav-item__link,
+.nav-item__link--download > span {
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.nav-item__link--download {
+  margin-right: -1em;
+}
+
+.nav-item__link--download > span {
+  flex-grow: 0;
+  width: 100px;
+}
+
+.list-nav,
+.list-nav > ul {
+  padding: 0em;
+  margin: 1em 0em;
+}
+
+.nav-item__link,
+.nav-item__link--download > span {
+  padding: 0.25em;
+}
+
+/* Visual */
+
+.nav-item__link--download {
+  background-color: #0c4;
+  font: bold 1em sans-serif;
+  color: #fff !important;
+}
+
+.nav-item__link--download:hover {
+  text-decoration: none;
+  color: #222 !important;
+}
+
+.nav-item__link--download:hover > span {
+  background-color: rgba(0, 0, 0, 0.5);
+}

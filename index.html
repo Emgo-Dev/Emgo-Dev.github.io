@@ -13,7 +13,8 @@
     <link rel="stylesheet" type="text/css" href="css/reset.css"/>
     <link rel="stylesheet" type="text/css" href="css/document-1.css"/>
     <link rel="stylesheet" type="text/css" href="css/index.css"/>
-    <link rel="stylesheet" type="text/css" href="css/list-nav.css"/>
+    <link rel="stylesheet" type="text/css" href="css/component/normal-list-sidebar.css"/>
+    <link rel="stylesheet" type="text/css" href="css/scrolldown-notifier.css" />
 
     <!-- Vendor Scripts -->
     <script src="js/vendor/vue-2.5.17.js"></script>
@@ -21,9 +22,7 @@
     <script src="js/vendor/jquery-2.1.4.min.js"></script>
     <script src="js/vendor/highlight.pack.js"></script>
 
-
     <!-- User Scripts -->
-    <script src="js/init-vue.js"></script>
     <script src="code/index.js"></script>
     <script src="posts/index.js"></script>
     <script src="js/config.js"></script>
@@ -40,8 +39,8 @@
 
           <div class="content">
             <section class="block">
-              <button v-on:click="p.w += 5; v.w -= 5;">Expand</button>
-              <button v-on:click="p.w -= 5; v.w += 5;">Shrink</button>
+              <button v-on:click="page.width += 5; viewer.width -= 5;">Expand</button>
+              <button v-on:click="page.width -= 5; viewer.width += 5;">Shrink</button>
               <button v-on:click="goToPreviousPost">Previous Post</button>
               <button v-on:click="changePostViewerFontSize( -0.1 )">- Font Size</button>
               <button v-on:click="changePostViewerFontSize( 0.1 )">+ Font Size</button>
@@ -49,11 +48,18 @@
 
             <section class="block"><p>Some text about me and what I do as filler content.</p></section>
 
-            <section id="PostList" class="block">
+            <section class="block">
+              <sidebar-post-list :list="posts" :current-post="viewer.post.current" @anchor-click="postLinkHandler" @anchor-inner-click="postLinkHandler"></sidebar-post-list>
+            </section>
+
+            <section class="block">
+              <sidebar-code-list :list="snippets"></sidebar-code-list>
+
               <nav class="viewer-nav">
                 <ul>
-                  <link-item text="Posts" :class="checkCurrentView(0) || checkCurrentView(2) ? 'active' : 'inactive'" @click.native="viewerLinkHandler(0)"></link-item>
-                  <link-item text="Code" :class="checkCurrentView(1) || checkCurrentView(3) ? 'active' : 'inactive'" @click.native="viewerLinkHandler(1)"></link-item>
+                  <link-item text="Posts" :class="checkCurrentView(0) || checkCurrentView(2) ? 'active' : 'inactive'" @item-click.native="viewerLinkHandler(0)"></link-item>
+                  <link-item text="Code" :class="checkCurrentView(1) || checkCurrentView(3) ? 'active' : 'inactive'" @item-click.native="viewerLinkHandler(1)"></link-item>
+                  <link-item v-if="false" text="Projects" :class="checkCurrentView(1) || checkCurrentView(3) ? 'active' : 'inactive'"></link-item>
                 </ul>
               </nav>
             </section>
@@ -61,6 +67,8 @@
         </div>
 
         <footer id="PageFooter" class="footer keep-bottom theme_bg" :style="pageWidth">
+          <scrolldown-notifier :class="pageHeight > 850 ? 'active' : 'inactive'">Scroll Down</scrolldown-notifier>
+
           <div class="block">
             <nav class="links">
               <ul class="x">
@@ -71,22 +79,12 @@
             </nav>
           </div>
 
-          <div class="block"><copyright>Michael Goldspinner</copyright></div>
+          <div class="block"><copyright>Logo Text</copyright></div>
         </footer>
       </main>
 
       <!-- Display a Viewer container for links -->
-      <viewer v-if="checkCurrentView(0) || checkCurrentView(1)" :style="viewerWidth">
-        <!-- If Viewer Link Hander #1 is clicked, display first collection of links -->
-        <link-view v-if="checkCurrentView(0)" :list="posts">
-          <link-item v-for="item of posts" @anchor-click="postLinkHandler" @anchor-inner-click="postLinkHandler" :key="item.id" :data-id="item.id" :file="item.file" :text="item.text" :href="item.href"></link-item>
-        </link-view>
-
-        <!-- If Viewer Link Hander #2 is clicked, display second collection of links -->
-        <link-view v-else-if="checkCurrentView(1)" :list="snippets">
-          <link-item v-for="item of snippets"  @anchor-click="codeLinkHandler" @anchor-inner-click="codeLinkHandler" :key="item.id" :file="item.file" :text="item.text" :href="item.href"></link-item>
-        </link-view>
-      </viewer>
+      <viewer v-if="checkCurrentView(0) || checkCurrentView(1)" :style="viewerWidth"></viewer>
 
       <!-- Display a Viewer container for post html -->
       <viewer v-if="checkCurrentView(2)" class-name="post-viewer" v-html="viewer.post.content" :style="viewerWidth + ' ' + viewerFontSize"></viewer>
@@ -96,10 +94,17 @@
     </div>
 
     <!-- VueJS Components -->
-    <script src="src/components/link-item.js"></script>
-    <script src="src/components/link-view.js"></script>
-    <script src="src/components/code-view.js"></script>
-    <script src="src/components/viewer.js"></script>
-    <script src="src/components/copyright.js"></script>
+    <script src="components/sidebar-post-list.js"></script>
+    <script src="components/sidebar-code-list.js"></script>
+    <script src="components/scrolldown-notifier.js"></script>
+    <script src="components/link-item.js"></script>
+    <script src="components/code-item.js"></script>
+    <script src="components/link-view.js"></script>
+    <script src="components/code-view.js"></script>
+    <script src="components/viewer.js"></script>
+    <script src="components/copyright.js"></script>
+
+    <!-- User Scripts -->
+    <script src="js/vue-home.js"></script>
   </body>
 </html>

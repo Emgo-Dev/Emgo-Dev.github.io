@@ -2,7 +2,7 @@ const LinkItem = {
   props: [
     'text',
     'href',
-    'file'
+    'file',
   ],
   methods: {
     anchorEmitter: function( event, key ){

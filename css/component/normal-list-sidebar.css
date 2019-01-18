@@ -1,0 +1,88 @@
+/* Structure */
+/*************/
+
+.viewer-nav {
+  padding: 0em;
+  margin: 0em;
+}
+
+/* Reset list numbering. */
+.viewer-nav .nav-item {
+  /* Only do this when a list item is scoped */
+  list-style: none;
+}
+
+/* Make list block-like. */
+.viewer-nav .nav-item {
+  display: block;
+}
+
+.viewer-nav .nav-item__button,
+.viewer-nav .nav-item__link,
+.viewer-nav .nav-item__link > span {
+  position: relative;
+  display: flex;
+  flex-basis: 100%;
+  flex-grow: 10;
+  flex-shrink: 10;
+  width: 100%;
+}
+
+.viewer-nav .nav-item__link {
+  padding: 0.5em;
+}
+
+.viewer-nav .nav-item__link::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  width: 75px;
+  height: 75px;
+  top: -50%;
+  right: -70px;
+  transition: right 1.5s;
+}
+
+/* Visual */
+/**********/
+
+.viewer-nav .nav-item {
+  font-weight: thin;
+  font-size: 1em;
+}
+
+/* Clear large :focus outline due to bubble-goo hover effect. */
+.nav-item a:focus {
+  outline: none;
+}
+
+/* Border Transition */
+.viewer-nav .nav-item__link,
+.viewer-nav .nav-item__link:hover {
+  transition: border-right 0.15s;
+}
+
+.viewer-nav .nav-item__link::after {
+  background-color: #111;
+}
+
+.viewer-nav .nav-item__link:hover::after,
+.viewer-nav .nav-item.active .nav-item__link::after {
+  right: -40px;
+  transition: right 0.25s;
+}
+
+.viewer-nav .nav-item__link {
+  border-right-style: solid;
+  border-right-width: 0px;
+  text-decoration: none;
+  transition: border-right 0.75s;
+}
+
+.viewer-nav .nav-item__link:hover,
+.viewer-nav .nav-item.active {
+  background-color: rgba(0, 0, 0, 0.35);
+  background-color: rgba(17, 17, 17, 1);
+  /*border-right-width: 20px;*/
+  color: white;
+}

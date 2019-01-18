@@ -1,7 +1,0 @@
-const PostLink = {
-  props: {
-    text: String,
-    href: String
-  },
-  template: '<li><a v-if="href" v-bind:href="href" v-bind:title="\'Link to \' + text" target="_self">{{ text }}</a><span v-else>{{ text }}</span></li>'
-}

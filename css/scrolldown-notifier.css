@@ -1,0 +1,59 @@
+.scroll-notifier {
+  z-index: 0;
+  position: absolute;
+  display: block;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  font-size: 1.25em;
+  text-align: center;
+  width: 100%;
+  padding: 0.5em 0em;
+  top: 0px;
+  transform: translateY(0%);
+  transition: transform 1s;
+}
+
+.scroll-notifier::after {
+  width: 100%;
+  background: inherit;
+  height: 105%;
+  content: "";
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  z-index: 2;
+  transform: translatey(0%);
+  transition: transform 1s;
+}
+
+.scroll-notifier.active::after {
+  transform: translatey(101%);
+}
+
+.scroll-notifier.active {
+  transform: translateY(-100%);
+}
+
+.scroll-notifier__arrow {
+  position: absolute;
+  font-weight: bold;
+  margin: 0em 0.25em;
+  animation-name: notifierArrow;
+  animation-duration: 1s;
+  animation-play-state: running;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  transform: translateY(0%);
+}
+
+@keyframes notifierArrow {
+  0% {
+    transform: translateY(25%);
+  }
+  50% {
+    transform: translateY(-25%);
+  }
+  100% {
+    transform: translateY(25%);
+  }
+}
